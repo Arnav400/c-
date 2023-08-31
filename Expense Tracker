@@ -1,0 +1,124 @@
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <iomanip>
+
+using namespace std;
+
+struct Expense {
+    string category;
+    double amount;
+    string date;
+    string description;
+};
+
+class BudgetManager {
+private:
+    vector<Expense> expenses;
+    double totalIncome;
+    double budgetLimit;
+
+public:
+    BudgetManager() : totalIncome(0.0), budgetLimit(0.0) {}
+
+    void addExpense(const Expense& expense) {
+        expenses.push_back(expense);
+    }
+
+    void setIncome(double income) {
+        totalIncome = income;
+    }
+
+    void setBudget(double budget) {
+        budgetLimit = budget;
+    }
+
+    void displaySummary() {
+        double totalExpenses = 0.0;
+
+        cout << "\nExpense Summary" << endl;
+        cout << "------------------------------------" << endl;
+
+        for (const Expense& expense : expenses) {
+            cout << "Category: " << expense.category << endl;
+            cout << "Amount: $" << expense.amount << endl;
+            cout << "Date: " << expense.date << endl;
+            cout << "Description: " << expense.description << endl;
+            cout << "------------------------------------" << endl;
+
+            totalExpenses += expense.amount;
+        }
+
+        cout << "Total Expenses: $" << totalExpenses << endl;
+        cout << "Total Income: $" << totalIncome << endl;
+        cout << "Budget Limit: $" << budgetLimit << endl;
+
+        if (totalExpenses > budgetLimit) {
+            cout << "Warning: Expenses exceeded budget!" << endl;
+        } else {
+            cout << "You're within your budget." << endl;
+        }
+    }
+};
+
+int main() {
+    BudgetManager manager;
+    int choice;
+    double income, budget;
+    Expense expense;
+
+    cout << "Welcome to the Expense Tracker and Budget Manager!" << endl;
+
+    do {
+        cout << "\nMenu:" << endl;
+        cout << "1. Set Income" << endl;
+        cout << "2. Set Budget" << endl;
+        cout << "3. Add Expense" << endl;
+        cout << "4. Display Summary" << endl;
+        cout << "5. Exit" << endl;
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1:
+                cout << "Enter your total income: $";
+                cin >> income;
+                manager.setIncome(income);
+                break;
+
+            case 2:
+                cout << "Enter your budget limit: $";
+                cin >> budget;
+                manager.setBudget(budget);
+                break;
+
+            case 3:
+                cout << "Enter expense category: ";
+                cin.ignore();
+                getline(cin, expense.category);
+                cout << "Enter expense amount: $";
+                cin >> expense.amount;
+                cout << "Enter expense date: ";
+                cin.ignore();
+                getline(cin, expense.date);
+                cout << "Enter expense description: ";
+                getline(cin, expense.description);
+                manager.addExpense(expense);
+                break;
+
+            case 4:
+                manager.displaySummary();
+                break;
+
+            case 5:
+                cout << "Exiting..." << endl;
+                break;
+
+            default:
+                cout << "Invalid choice. Please enter a valid option." << endl;
+        }
+
+    } while (choice != 5);
+
+    return 0;
+}
